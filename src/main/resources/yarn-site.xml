@@ -16,7 +16,7 @@
 
     <property>
         <name>yarn.resourcemanager.hostname</name>
-        <value>hadoop.zhengzhou.com</value>
+        <value>127.0.0.2</value>
     </property>
 
     <property>

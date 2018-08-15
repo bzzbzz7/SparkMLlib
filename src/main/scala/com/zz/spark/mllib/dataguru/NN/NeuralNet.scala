@@ -3,26 +3,15 @@ package NN
 import org.apache.spark._
 import org.apache.spark.SparkContext._
 import org.apache.spark.rdd.RDD
-import org.apache.spark.Logging
 import org.apache.spark.mllib.linalg._
-
-import breeze.linalg.{
-  Matrix => BM,
-  CSCMatrix => BSM,
-  DenseMatrix => BDM,
-  Vector => BV,
-  DenseVector => BDV,
-  SparseVector => BSV,
-  axpy => brzAxpy,
-  svd => brzSvd
-}
-import breeze.numerics.{
-  exp => Bexp,
-  tanh => Btanh
-}
+import breeze.linalg.{CSCMatrix => BSM, DenseMatrix => BDM, DenseVector => BDV, Matrix => BM, SparseVector => BSV, Vector => BV, axpy => brzAxpy, svd => brzSvd}
+import breeze.numerics.{exp => Bexp, tanh => Btanh}
 
 import scala.collection.mutable.ArrayBuffer
 import java.util.Random
+
+import org.apache.spark.internal.Logging
+
 import scala.math._
 
 /**

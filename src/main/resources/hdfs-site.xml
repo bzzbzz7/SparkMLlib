@@ -24,6 +24,6 @@
 
     <property>
         <name>dfs.namenode.secondary.http-address</name>
-        <value>hadoop.zhengzhou.com:50090</value>
+        <value>127.0.0.2:50090</value>
     </property>
 </configuration>

@@ -20,7 +20,7 @@
 
     <property>
         <name>fs.defaultFS</name>
-        <value>hdfs://hadoop.zhengzhou.com:8020</value>
+        <value>hdfs://127.0.0.2:8020</value>
     </property>
 
     <property>

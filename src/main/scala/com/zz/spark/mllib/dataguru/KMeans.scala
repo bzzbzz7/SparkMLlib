@@ -1,6 +1,7 @@
 
-import org.apache.log4j.{ Level, Logger }
-import org.apache.spark.{ SparkConf, SparkContext }
+import com.zz.util.PathUtil
+import org.apache.log4j.{Level, Logger}
+import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.mllib.clustering._
 import org.apache.spark.mllib.linalg.Vectors
 
@@ -13,8 +14,9 @@ object KMeans {
     Logger.getRootLogger.setLevel(Level.WARN)
 
     // 读取样本数据1，格式为LIBSVM format
-    val data = sc.textFile("/home/jb-huangmeiling/sample_kmeans_data.txt")
-    val parsedData = data.map(s => Vectors.dense(s.split('\t').map(_.toDouble))).cache()
+    val data_path = PathUtil.root + "/user/spark/mllib/dataguru/kmeans_data.txt"
+    val data = sc.textFile(data_path)
+    val parsedData = data.map(s => Vectors.dense(s.split(' ').map(_.toDouble))).cache()
 
     // 新建KMeans聚类模型，并训练
     val initMode = "k-means||"
@@ -36,9 +38,9 @@ object KMeans {
     println("Within Set Sum of Squared Errors = " + WSSSE)
 
     //保存模型
-    val ModelPath = "/user/huangmeiling/KMeans_Model"
-    model.save(sc, ModelPath)
-    val sameModel = KMeansModel.load(sc, ModelPath)
+//    val ModelPath = PathUtil.root + "/user/spark/mllib/dataguru/KMeans_Model"
+//    model.save(sc, ModelPath)
+//    val sameModel = KMeansModel.load(sc, ModelPath)
 
   }
 

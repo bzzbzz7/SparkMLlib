@@ -23,9 +23,9 @@ object Word2Vec {
     val conf = new SparkConf().setMaster("local[2]").setAppName("ALS")
     val sc = new SparkContext(conf)
 
-    val modelPath = "hdfs://hadoop.zhengzhou.com:8020/user/spark/mllib/result/feature/word2vec/model"
+    val modelPath = "hdfs://127.0.0.2:8020/user/spark/mllib/result/feature/word2vec/model"
 
-    val input = sc.textFile("hdfs://hadoop.zhengzhou.com:8020/user/spark/mllib/data/feature/word2vec2.txt")
+    val input = sc.textFile("hdfs://127.0.0.2:8020/user/spark/mllib/data/feature/word2vec2.txt")
       .map(line => line.split(" ").toSeq)
 
     val word2vec = new Word2Vec()

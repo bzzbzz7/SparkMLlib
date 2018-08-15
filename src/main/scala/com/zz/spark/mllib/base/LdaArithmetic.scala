@@ -23,14 +23,14 @@ object LdaArithmetic {
     val conf = new SparkConf().setMaster("local[2]").setAppName("LDA")
     val sc = new SparkContext(conf)
 
-    val modelPath = "hdfs://hadoop.zhengzhou.com:8020/user/spark/mllib/result/lda/model"
+    val modelPath = "hdfs://127.0.0.2:8020/user/spark/mllib/result/lda/model"
     //doc-topic
-    val modelPath2 = "hdfs://hadoop.zhengzhou.com:8020/user/spark/mllib/result/lda/model2"
+    val modelPath2 = "hdfs://127.0.0.2:8020/user/spark/mllib/result/lda/model2"
 
     //1 加载数据，返回的数据格式为：documents: RDD[(Long, Vector)]
     // 其中：Long为文章ID，Vector为文章分词后的词向量
     // 可以读取指定目录下的数据，通过分词以及数据格式的转换，转换成RDD[(Long, Vector)]即可
-    val data = sc.textFile("hdfs://hadoop.zhengzhou.com:8020/user/spark/mllib/data/lda/sample_lda_data.txt", 1)
+    val data = sc.textFile("hdfs://127.0.0.2:8020/user/spark/mllib/data/lda/sample_lda_data.txt", 1)
     val parsedData = data.map(s => Vectors.dense(s.split(' ').map(_.toDouble)))
     //通过唯一id为文档构建index
     val corpus = parsedData.zipWithIndex.map(_.swap).cache()

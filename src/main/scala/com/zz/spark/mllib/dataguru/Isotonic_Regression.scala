@@ -1,7 +1,8 @@
 
-import org.apache.log4j.{ Level, Logger }
-import org.apache.spark.{ SparkConf, SparkContext }
-import org.apache.spark.mllib.regression.{ IsotonicRegression, IsotonicRegressionModel }
+import com.zz.util.PathUtil
+import org.apache.log4j.{Level, Logger}
+import org.apache.spark.{SparkConf, SparkContext}
+import org.apache.spark.mllib.regression.{IsotonicRegression, IsotonicRegressionModel}
 
 object Isotonic_Regression {
 
@@ -12,7 +13,8 @@ object Isotonic_Regression {
     Logger.getRootLogger.setLevel(Level.WARN)
 
     // 读取样本数据
-    val data = sc.textFile("/home/jb-huangmeiling/sample_isotonic_regression_data.txt")
+    val data_path = PathUtil.root + "/user/spark/mllib/dataguru/sample_isotonic_regression_data.txt"
+    val data = sc.textFile(data_path)
     val parsedData = data.map { line =>
       val parts = line.split(',').map(_.toDouble)
       (parts(0), parts(1), 1.0)
@@ -55,9 +57,9 @@ object Isotonic_Regression {
     println("Mean Squared Error = " + meanSquaredError)
 
     // 保存模型
-    val ModelPath = "/user/huangmeiling/Isotonic_Regression_Model"
-    model.save(sc, ModelPath)
-    val sameModel = IsotonicRegressionModel.load(sc, ModelPath)
+//    val ModelPath = "/user/huangmeiling/Isotonic_Regression_Model"
+//    model.save(sc, ModelPath)
+//    val sameModel = IsotonicRegressionModel.load(sc, ModelPath)
   }
 
 }

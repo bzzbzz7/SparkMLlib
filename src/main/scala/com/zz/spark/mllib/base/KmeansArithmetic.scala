@@ -19,9 +19,9 @@ object KmeansArithmetic {
 //    Logger.getLogger("org.apache.spark").setLevel(Level.WARN)
 //    Logger.getLogger("org.eclipse.jetty.server").setLevel(Level.OFF)
 
-    // 设置运行环境 spark://hadoop.zhengzhou.com:7077
+    // 设置运行环境 spark://127.0.0.2:7077
 //    val conf = new SparkConf()
-//      .setMaster("spark://hadoop.zhengzhou.com:7077")
+//      .setMaster("spark://127.0.0.2:7077")
 //      .setAppName("Kmeans")
 //      .setJars(List("out/artifacts/SparkMLlib_jar/SparkMLlib.jar"))
 
@@ -32,7 +32,7 @@ object KmeansArithmetic {
     val sc = new SparkContext(conf)
 
     // 装载数据集
-    val data = sc.textFile("hdfs://hadoop.zhengzhou.com:8020/user/spark/mllib/data/kmeans/kmeans_data.txt", 1)
+    val data = sc.textFile("hdfs://127.0.0.2:8020/user/spark/mllib/data/kmeans/kmeans_data.txt", 1)
     val parsedData = data.map(s => Vectors.dense(s.split(' ').map(_.toDouble)))
 
     // 将数据集聚类，2个类，20次迭代，进行模型训练形成数据模型
@@ -58,7 +58,7 @@ object KmeansArithmetic {
     // 交叉评估1，只返回结果
     val testdata = data.map(s => Vectors.dense(s.split(' ').map(_.toDouble)))
     val result1 = model.predict(testdata)
-    result1.saveAsTextFile("hdfs://hadoop.zhengzhou.com:8020/user/spark/mllib/result/kmeans/kmeams1")
+    result1.saveAsTextFile("hdfs://127.0.0.2:8020/user/spark/mllib/result/kmeans/kmeams1")
 
     // 交叉评估2，返回数据集和结果
     val result2 = data.map {
@@ -66,7 +66,7 @@ object KmeansArithmetic {
         val linevectore = Vectors.dense(line.split(' ').map(_.toDouble))
         val prediction = model.predict(linevectore)
         line + " " + prediction
-    }.saveAsTextFile("hdfs://hadoop.zhengzhou.com:8020/user/spark/mllib/result/kmeans/kmeams2")
+    }.saveAsTextFile("hdfs://127.0.0.2:8020/user/spark/mllib/result/kmeans/kmeams2")
 
     sc.stop()
   }

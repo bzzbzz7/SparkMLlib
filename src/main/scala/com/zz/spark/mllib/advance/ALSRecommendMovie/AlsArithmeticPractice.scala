@@ -18,20 +18,20 @@ object AlsArithmeticPractice {
   def main(args: Array[String]) {
 
     // 屏蔽不必要的日志显示在终端上
-//    Logger.getLogger("org.apache.spark").setLevel(Level.WARN)
-//    Logger.getLogger("org.eclipse.jetty.server").setLevel(Level.OFF)
+    //    Logger.getLogger("org.apache.spark").setLevel(Level.WARN)
+    //    Logger.getLogger("org.eclipse.jetty.server").setLevel(Level.OFF)
 
     // 设置运行环境
     val conf = new SparkConf().setMaster("local[3]").setAppName("ALSPractice")
     val sc = new SparkContext(conf)
 
     val personalRatingsPath = "data/user/spark/mllib/data/als2/personalRatings.txt"
-    val moviesPath = "hdfs://hadoop.zhengzhou.com:8020/user/spark/mllib/data/als2/movies.dat"
-    val ratingsPath = "hdfs://hadoop.zhengzhou.com:8020/user/spark/mllib/data/als2/ratings.dat"
-    val userPath = "hdfs://hadoop.zhengzhou.com:8020/user/spark/mllib/data/als2/users.dat"
+    val moviesPath = "file:///E:/ideaProjects/SparkMLlib/data/user/spark/mllib/data/als2/movies.dat"
+    val ratingsPath = "file:///E:/ideaProjects/SparkMLlib/data/user/spark/mllib/data/als2/ratings.dat"
+    val userPath = "file:///E:/ideaProjects/SparkMLlib/data/user/spark/mllib/data/als2/users.dat"
 
-    val modelPath = "hdfs://hadoop.zhengzhou.com:8020/user/spark/mllib/result/als2/model"
-    val outPath = "hdfs://hadoop.zhengzhou.com:8020/user/spark/mllib/result/als2/data"
+    val modelPath = "file:///E:/ideaProjects/SparkMLlib/data/user/spark/mllib/result/als2/model"
+    val outPath = "file:///E:/ideaProjects/SparkMLlib/data/user/spark/mllib/result/als2/data"
 
     // 装载用户评分数据，该评分由评分器生成，即文件personalRatings.txt
     val myRatings = loadRatings(personalRatingsPath)

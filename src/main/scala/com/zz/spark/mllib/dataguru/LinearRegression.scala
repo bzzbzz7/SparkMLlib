@@ -1,5 +1,6 @@
-import org.apache.log4j.{ Level, Logger }
-import org.apache.spark.{ SparkConf, SparkContext }
+import com.zz.util.PathUtil
+import org.apache.log4j.{Level, Logger}
+import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.mllib.regression.LinearRegressionWithSGD
 import org.apache.spark.mllib.util.MLUtils
 import org.apache.spark.mllib.regression.LabeledPoint
@@ -15,8 +16,8 @@ object LinearRegression {
     Logger.getRootLogger.setLevel(Level.WARN)
 
     //读取样本数据
-    val data_path1 = "/home/jb-huangmeiling/lpsa.data"
-    val data = sc.textFile(data_path1)
+    val data_path = PathUtil.root + "/user/spark/mllib/dataguru/lpsa.data"
+    val data = sc.textFile(data_path)
     val examples = data.map { line =>
       val parts = line.split(',')
       LabeledPoint(parts(0).toDouble, Vectors.dense(parts(1).split(' ').map(_.toDouble)))
@@ -49,9 +50,9 @@ object LinearRegression {
     println(s"Test RMSE = $rmse.")
 
     // 模型保存
-    val ModelPath = "/user/huangmeiling/LinearRegressionModel"
-    model.save(sc, ModelPath)
-    val sameModel = LinearRegressionModel.load(sc, ModelPath)
+//    val ModelPath = "/user/huangmeiling/LinearRegressionModel"
+//    model.save(sc, ModelPath)
+//    val sameModel = LinearRegressionModel.load(sc, ModelPath)
 
   }
 
