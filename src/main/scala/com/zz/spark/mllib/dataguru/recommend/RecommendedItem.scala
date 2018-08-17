@@ -17,9 +17,7 @@ class RecommendedItem {
    * @param RDD[UserRecomm] 返回用户推荐物品
    *
    */
-  def Recommend(items_similar: RDD[ItemSimi],
-    user_prefer: RDD[ItemPref],
-    r_number: Int): (RDD[UserRecomm]) = {
+  def Recommend(items_similar: RDD[ItemSimi], user_prefer: RDD[ItemPref], r_number: Int): (RDD[UserRecomm]) = {
     //   0 数据准备  
     val rdd_app1_R1 = items_similar.map(f => (f.itemid1, f.itemid2, f.similar))
     val user_prefer1 = user_prefer.map(f => (f.userid, f.itemid, f.pref))
@@ -55,8 +53,7 @@ class RecommendedItem {
    * @param RDD[UserRecomm] 返回用户推荐物品
    *
    */
-  def Recommend(items_similar: RDD[ItemSimi],
-    user_prefer: RDD[ItemPref]): (RDD[UserRecomm]) = {
+  def Recommend(items_similar: RDD[ItemSimi], user_prefer: RDD[ItemPref]): (RDD[UserRecomm]) = {
     //   0 数据准备  
     val rdd_app1_R1 = items_similar.map(f => (f.itemid1, f.itemid2, f.similar))
     val user_prefer1 = user_prefer.map(f => (f.userid, f.itemid, f.pref))
