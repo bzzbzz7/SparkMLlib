@@ -7,37 +7,37 @@ import org.apache.spark.mllib.regression.LabeledPoint
 object tmp_naive_bayes {
 
   def main(args: Array[String]) {
-    //1 ¹¹½¨Spark¶ÔÏó
+    //1 æ„å»ºSparkå¯¹è±¡
     val conf = new SparkConf().setAppName("naive_bayes")
     val sc = new SparkContext(conf)
     Logger.getRootLogger.setLevel(Level.WARN)
 
-    //¶ÁÈ¡Ñù±¾Êı¾İ1
+    //è¯»å–æ ·æœ¬æ•°æ®1
     val data = sc.textFile("/home/jb-huangmeiling/sample_naive_bayes_data.txt")
     val parsedData = data.map { line =>
       val parts = line.split(',')
       LabeledPoint(parts(0).toDouble, Vectors.dense(parts(1).split(' ').map(_.toDouble)))
     }
 
-    //Ñù±¾Êı¾İ»®·ÖÑµÁ·Ñù±¾Óë²âÊÔÑù±¾
+    //æ ·æœ¬æ•°æ®åˆ’åˆ†è®­ç»ƒæ ·æœ¬ä¸æµ‹è¯•æ ·æœ¬
     val splits = parsedData.randomSplit(Array(0.6, 0.4), seed = 11L)
     val training = splits(0)
     val test = splits(1)
 
-    //ĞÂ½¨±´Ò¶Ë¹·ÖÀàÄ£ĞÍÄ£ĞÍ£¬²¢ÑµÁ·
+    //æ–°å»ºè´å¶æ–¯åˆ†ç±»æ¨¡å‹æ¨¡å‹ï¼Œå¹¶è®­ç»ƒ
     val model = NaiveBayes.train(training, lambda = 1.0, modelType = "multinomial")
 
-    //¶Ô²âÊÔÑù±¾½øĞĞ²âÊÔ
+    //å¯¹æµ‹è¯•æ ·æœ¬è¿›è¡Œæµ‹è¯•
     val predictionAndLabel = test.map(p => (model.predict(p.features), p.label))
     val print_predict = predictionAndLabel.take(20)
     println("prediction" + "\t" + "label")
-    for (i <- 0 to print_predict.length - 1) {
+    for (i <- 0 until print_predict.length - 1) {
       println(print_predict(i)._1 + "\t" + print_predict(i)._2)
     }
-    
+
     val accuracy = 1.0 * predictionAndLabel.filter(x => x._1 == x._2).count() / test.count()
 
-    //±£´æÄ£ĞÍ
+    //ä¿å­˜æ¨¡å‹
     val ModelPath = "/user/huangmeiling/naive_bayes_model"
     model.save(sc, ModelPath)
     val sameModel = NaiveBayesModel.load(sc, ModelPath)

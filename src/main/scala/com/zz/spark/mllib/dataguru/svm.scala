@@ -8,39 +8,39 @@ import org.apache.spark.mllib.util.MLUtils
 object svm {
 
   def main(args: Array[String]) {
-    //1 ¹¹½¨Spark¶ÔÏó
+    //1 æ„å»ºSparkå¯¹è±¡
     val conf = new SparkConf().setAppName("svm")
     val sc = new SparkContext(conf)
     Logger.getRootLogger.setLevel(Level.WARN)
 
-    // ¶ÁÈ¡Ñù±¾Êı¾İ1£¬¸ñÊ½ÎªLIBSVM format
+    // è¯»å–æ ·æœ¬æ•°æ®1ï¼Œæ ¼å¼ä¸ºLIBSVM format
     val data = MLUtils.loadLibSVMFile(sc, "hdfs://192.168.180.79:9000/user/huangmeiling/sample_libsvm_data.txt")
 
-    //Ñù±¾Êı¾İ»®·ÖÑµÁ·Ñù±¾Óë²âÊÔÑù±¾
+    //æ ·æœ¬æ•°æ®åˆ’åˆ†è®­ç»ƒæ ·æœ¬ä¸æµ‹è¯•æ ·æœ¬
     val splits = data.randomSplit(Array(0.6, 0.4), seed = 11L)
     val training = splits(0).cache()
     val test = splits(1)
 
-    //ĞÂ½¨Âß¼­»Ø¹éÄ£ĞÍ£¬²¢ÑµÁ·
+    //æ–°å»ºé€»è¾‘å›å½’æ¨¡å‹ï¼Œå¹¶è®­ç»ƒ
     val numIterations = 100
     val model = SVMWithSGD.train(training, numIterations)
 
-    //¶Ô²âÊÔÑù±¾½øĞĞ²âÊÔ
+    //å¯¹æµ‹è¯•æ ·æœ¬è¿›è¡Œæµ‹è¯•
     val predictionAndLabel = test.map { point =>
       val score = model.predict(point.features)
       (score, point.label)
     }
     val print_predict = predictionAndLabel.take(20)
     println("prediction" + "\t" + "label")
-    for (i <- 0 to print_predict.length - 1) {
+    for (i <- 0 until print_predict.length - 1) {
       println(print_predict(i)._1 + "\t" + print_predict(i)._2)
     }
 
-    // Îó²î¼ÆËã
+    // è¯¯å·®è®¡ç®—
     val accuracy = 1.0 * predictionAndLabel.filter(x => x._1 == x._2).count() / test.count()
     println("Area under ROC = " + accuracy)
 
-    //±£´æÄ£ĞÍ
+    //ä¿å­˜æ¨¡å‹
     val ModelPath = "/user/huangmeiling/svm_model"
     model.save(sc, ModelPath)
     val sameModel = SVMModel.load(sc, ModelPath)
