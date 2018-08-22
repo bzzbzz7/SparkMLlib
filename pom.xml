@@ -15,27 +15,32 @@
         <hadoop.version>2.6.0</hadoop.version>
         <mahout.version>0.13.0</mahout.version>
         <!--<hive.version>1.2</hive.version>-->
+
+        <jedis.version>2.9.0</jedis.version>
+        <fastjson.version>1.2.47</fastjson.version>
+        <jetty.version>9.4.11.v20180605</jetty.version>
+        <jersey.version>2.26</jersey.version>
+
+        <junit.version>4.11</junit.version>
     </properties>
 
+    <repositories>
+        <repository>
+            <!-- DO NOT set id to "local" because it is reserved by Maven -->
+            <id>local-lib</id>
+            <url>file://${project.basedir}/lib</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
+
     <dependencies>
-
+        <!-- put javax.ws.rs as the first dependency, it is important!!! -->
         <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-server</artifactId>
-            <version>9.4.11.v20180605</version>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>2.0</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-servlet</artifactId>
-            <version>9.4.11.v20180605</version>
-        </dependency>
-
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>2.9.0</version>
-        </dependency>
 
         <dependency>
             <groupId>commons-io</groupId>
@@ -43,37 +48,72 @@
             <version>2.6</version>
         </dependency>
 
+
+
+
+
+        <!--======================junit======================-->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!--======================jetty======================-->
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-util</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+
+        <!--======================jersey======================-->
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-server</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-servlet-core</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-jetty-http</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-moxy</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+
+        <!--======================redis======================-->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>${jedis.version}</version>
+        </dependency>
+
+        <!--======================fastjson======================-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.47</version>
+            <version>${fastjson.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>net.sf.json-lib</groupId>
-            <artifactId>json-lib</artifactId>
-            <version>2.4</version>
-            <classifier>jdk15</classifier>
-        </dependency>
-
-        <dependency>
-            <groupId>org.ansj</groupId>
-            <artifactId>ansj_seg</artifactId>
-            <version>0.9</version>
-        </dependency>
-        <dependency>
-            <groupId>org.ansj</groupId>
-            <artifactId>tree_split</artifactId>
-            <version>1.0.1</version>
-        </dependency>
-
-
-        <dependency>
-            <groupId>org.scala-lang</groupId>
-            <artifactId>scala-library</artifactId>
-            <version>2.11.8</version>
-        </dependency>
-
 
         <!--======================hadoop======================-->
         <dependency>
@@ -115,6 +155,12 @@
             </exclusions>
         </dependency>
         <!--======================mahout======================-->
+        <dependency>
+            <groupId>org.apache.mahout</groupId>
+            <artifactId>mahout-mr</artifactId>
+            <version>${mahout.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.mahout</groupId>
             <artifactId>mahout-examples</artifactId>
