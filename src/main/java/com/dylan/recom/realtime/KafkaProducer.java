@@ -15,7 +15,7 @@ import kafka.producer.KeyedMessage;
 import kafka.producer.ProducerConfig;
 
 public class KafkaProducer implements Runnable {
-  private static final Logger LOGGER = Logger.getLogger(KafkaProducer.class);
+//  private static final Logger LOGGER = Logger.getLogger(KafkaProducer.class);
   private final String topic;
 
   public KafkaProducer(String topic) {
@@ -34,7 +34,9 @@ public class KafkaProducer implements Runnable {
     Properties props = new Properties();
     props.put("metadata.broker.list", Constants.KAFKA_ADDR);
     props.put("serializer.class", "kafka.serializer.StringEncoder");
+    props.put("request.required.acks", "1");
     props.put("producer.type", "async");
+
     ProducerConfig conf = new ProducerConfig(props);
     Producer<Integer, String> producer = null;
     try {
@@ -49,8 +51,8 @@ public class KafkaProducer implements Runnable {
       }
       System.out.println("Done sending messages");
     } catch (Exception ex) {
-      LOGGER.fatal("Error while producing messages", ex);
-      LOGGER.trace(null, ex);
+//      LOGGER.fatal("Error while producing messages", ex);
+//      LOGGER.trace(null, ex);
       System.err.println("Error while producing messages：" + ex);
     } finally {
       if (producer != null) producer.close();

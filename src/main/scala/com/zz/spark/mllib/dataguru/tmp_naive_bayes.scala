@@ -1,6 +1,7 @@
-import org.apache.log4j.{ Level, Logger }
-import org.apache.spark.{ SparkConf, SparkContext }
-import org.apache.spark.mllib.classification.{ NaiveBayes, NaiveBayesModel }
+import com.zz.util.PathUtil
+import org.apache.log4j.{Level, Logger}
+import org.apache.spark.{SparkConf, SparkContext}
+import org.apache.spark.mllib.classification.{NaiveBayes, NaiveBayesModel}
 import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.mllib.regression.LabeledPoint
 
@@ -8,12 +9,13 @@ object tmp_naive_bayes {
 
   def main(args: Array[String]) {
     //1 构建Spark对象
-    val conf = new SparkConf().setAppName("naive_bayes")
+    val conf = new SparkConf().setMaster("local[*]").setAppName("naive_bayes")
     val sc = new SparkContext(conf)
     Logger.getRootLogger.setLevel(Level.WARN)
 
     //读取样本数据1
-    val data = sc.textFile("/home/jb-huangmeiling/sample_naive_bayes_data.txt")
+    val data_path = PathUtil.root + "/user/spark/mllib/dataguru/sample_naive_bayes_data.txt"
+    val data = sc.textFile(data_path)
     val parsedData = data.map { line =>
       val parts = line.split(',')
       LabeledPoint(parts(0).toDouble, Vectors.dense(parts(1).split(' ').map(_.toDouble)))
@@ -38,9 +40,9 @@ object tmp_naive_bayes {
     val accuracy = 1.0 * predictionAndLabel.filter(x => x._1 == x._2).count() / test.count()
 
     //保存模型
-    val ModelPath = "/user/huangmeiling/naive_bayes_model"
-    model.save(sc, ModelPath)
-    val sameModel = NaiveBayesModel.load(sc, ModelPath)
+//    val ModelPath = "/user/huangmeiling/naive_bayes_model"
+//    model.save(sc, ModelPath)
+//    val sameModel = NaiveBayesModel.load(sc, ModelPath)
 
   }
 }

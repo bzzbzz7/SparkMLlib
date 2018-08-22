@@ -1,7 +1,8 @@
 
-import org.apache.log4j.{ Level, Logger }
-import org.apache.spark.{ SparkConf, SparkContext }
-import org.apache.spark.mllib.classification.{ SVMModel, SVMWithSGD }
+import com.zz.util.PathUtil
+import org.apache.log4j.{Level, Logger}
+import org.apache.spark.{SparkConf, SparkContext}
+import org.apache.spark.mllib.classification.{SVMModel, SVMWithSGD}
 import org.apache.spark.mllib.evaluation.BinaryClassificationMetrics
 import org.apache.spark.mllib.util.MLUtils
 
@@ -9,12 +10,13 @@ object svm {
 
   def main(args: Array[String]) {
     //1 构建Spark对象
-    val conf = new SparkConf().setAppName("svm")
+    val conf = new SparkConf().setMaster("local[*]").setAppName("svm")
     val sc = new SparkContext(conf)
     Logger.getRootLogger.setLevel(Level.WARN)
 
     // 读取样本数据1，格式为LIBSVM format
-    val data = MLUtils.loadLibSVMFile(sc, "hdfs://192.168.180.79:9000/user/huangmeiling/sample_libsvm_data.txt")
+    val data_path = PathUtil.root + "/user/spark/mllib/dataguru/sample_libsvm_data.txt"
+    val data = MLUtils.loadLibSVMFile(sc, data_path)
 
     //样本数据划分训练样本与测试样本
     val splits = data.randomSplit(Array(0.6, 0.4), seed = 11L)
@@ -41,9 +43,9 @@ object svm {
     println("Area under ROC = " + accuracy)
 
     //保存模型
-    val ModelPath = "/user/huangmeiling/svm_model"
-    model.save(sc, ModelPath)
-    val sameModel = SVMModel.load(sc, ModelPath)
+//    val ModelPath = "/user/huangmeiling/svm_model"
+//    model.save(sc, ModelPath)
+//    val sameModel = SVMModel.load(sc, ModelPath)
 
   }
 

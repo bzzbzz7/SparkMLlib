@@ -1,5 +1,6 @@
-import org.apache.log4j.{ Level, Logger }
-import org.apache.spark.{ SparkConf, SparkContext }
+import com.zz.util.PathUtil
+import org.apache.log4j.{Level, Logger}
+import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.mllib.tree.DecisionTree
 import org.apache.spark.mllib.tree.model.DecisionTreeModel
 import org.apache.spark.mllib.util.MLUtils
@@ -8,12 +9,13 @@ object tree {
 
   def main(args: Array[String]) {
     //1 构建Spark对象
-    val conf = new SparkConf().setAppName("DecisionTree")
+    val conf = new SparkConf().setMaster("local[*]").setAppName("DecisionTree")
     val sc = new SparkContext(conf)
     Logger.getRootLogger.setLevel(Level.WARN)
 
     // 读取样本数据1，格式为LIBSVM format
-    val data = MLUtils.loadLibSVMFile(sc, "/home/jb-huangmeiling/sample_libsvm_data.txt")
+    val data_path = PathUtil.root + "/user/spark/mllib/dataguru/sample_libsvm_data.txt"
+    val data = MLUtils.loadLibSVMFile(sc, data_path)
     // Split the data into training and test sets (30% held out for testing)
     val splits = data.randomSplit(Array(0.7, 0.3))
     val (trainingData, testData) = (splits(0), splits(1))
@@ -43,9 +45,9 @@ object tree {
     println("Learned classification tree model:\n" + model.toDebugString)
 
     // 保存模型
-    val ModelPath = "/user/huangmeiling/Decision_Tree_Model"
-    model.save(sc, ModelPath)
-    val sameModel = DecisionTreeModel.load(sc, ModelPath)
+//    val ModelPath = "/user/huangmeiling/Decision_Tree_Model"
+//    model.save(sc, ModelPath)
+//    val sameModel = DecisionTreeModel.load(sc, ModelPath)
   }
 
 }

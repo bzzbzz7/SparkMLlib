@@ -64,11 +64,11 @@ object MovieLensALS {
       sys.exit(1)
     }
 
-    val conf = new SparkConf().setAppName("MovieLensALS")
-      .set("spark.executor.memory", "500m")
+    val conf = new SparkConf().setMaster("local[*]").setAppName("MovieLensALS")//.set("spark.executor.memory", "500m")
     val sc = new SparkContext(conf)
 
     //3.2 Load ratings data and know your data
+//    "file:///E:/ideaProjects/SparkMLlib/data/user/spark/mllib/bf/MovieLens/ml-1m/"
     val movieLensHomeDir = args(0)
     val ratings = sc.textFile(new File(movieLensHomeDir, "ratings.dat").toString).map { line =>
       val fields = line.split("::")
