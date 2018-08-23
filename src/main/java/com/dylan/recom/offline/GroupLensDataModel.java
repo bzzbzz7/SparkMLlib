@@ -1,4 +1,3 @@
-
 package com.dylan.recom.offline;
 
 import com.google.common.io.Files;
@@ -13,65 +12,65 @@ import java.net.URL;
 import java.util.regex.Pattern;
 
 public final class GroupLensDataModel extends FileDataModel {
-  
-  private static final String COLON_DELIMTER = "::";
-  private static final Pattern COLON_DELIMITER_PATTERN = Pattern.compile(COLON_DELIMTER);
-  
-  public GroupLensDataModel() throws IOException {
-    this(readResourceToTempFile("/../resources/ratings.dat"));
-  }
-  
-  /**
-   * @param ratingsFile GroupLens ratings.dat file in its native format
-   * @throws IOException if an error occurs while reading or writing files
-   */
-  public GroupLensDataModel(File ratingsFile) throws IOException {
-    super(convertGLFile(ratingsFile));
-  }
-  
-  private static File convertGLFile(File originalFile) throws IOException {
-    // Now translate the file; remove commas, then convert "::" delimiter to comma
-    File resultFile = new File(new File(System.getProperty("java.io.tmpdir")), "ratings.txt");
-    if (resultFile.exists()) {
-      resultFile.delete();
+
+    private static final String COLON_DELIMTER = "::";
+    private static final Pattern COLON_DELIMITER_PATTERN = Pattern.compile(COLON_DELIMTER);
+
+    public GroupLensDataModel() throws IOException {
+        this(readResourceToTempFile("/../resources/ratings.dat"));
     }
-    try {
-      Writer writer = new OutputStreamWriter(new FileOutputStream(resultFile), Charsets.UTF_8);
-      for (String line : new FileLineIterable(originalFile, false)) {
-        int lastDelimiterStart = line.lastIndexOf(COLON_DELIMTER);
-        if (lastDelimiterStart < 0) {
-          throw new IOException("Unexpected input format on line: " + line);
+
+    /**
+     * @param ratingsFile GroupLens ratings.dat file in its native format
+     * @throws IOException if an error occurs while reading or writing files
+     */
+    public GroupLensDataModel(File ratingsFile) throws IOException {
+        super(convertGLFile(ratingsFile));
+    }
+
+    private static File convertGLFile(File originalFile) throws IOException {
+        // Now translate the file; remove commas, then convert "::" delimiter to comma
+        File resultFile = new File(new File(System.getProperty("java.io.tmpdir")), "ratings.txt");
+        if (resultFile.exists()) {
+            resultFile.delete();
         }
-        String subLine = line.substring(0, lastDelimiterStart);
-        String convertedLine = COLON_DELIMITER_PATTERN.matcher(subLine).replaceAll(",");
-        writer.write(convertedLine);
-        writer.write('\n');
-      }
-    } catch (IOException ioe) {
-      resultFile.delete();
-      throw ioe;
+        try {
+            Writer writer = new OutputStreamWriter(new FileOutputStream(resultFile), Charsets.UTF_8);
+            for (String line : new FileLineIterable(originalFile, false)) {
+                int lastDelimiterStart = line.lastIndexOf(COLON_DELIMTER);
+                if (lastDelimiterStart < 0) {
+                    throw new IOException("Unexpected input format on line: " + line);
+                }
+                String subLine = line.substring(0, lastDelimiterStart);
+                String convertedLine = COLON_DELIMITER_PATTERN.matcher(subLine).replaceAll(",");
+                writer.write(convertedLine);
+                writer.write('\n');
+            }
+        } catch (IOException ioe) {
+            resultFile.delete();
+            throw ioe;
+        }
+        return resultFile;
     }
-    return resultFile;
-  }
 
-  public static File readResourceToTempFile(String resourceName) throws IOException {
-    InputSupplier<? extends InputStream> inSupplier;
-    try {
-      URL resourceURL = Resources.getResource(GroupLensDataModel.class, resourceName);
-      inSupplier = Resources.newInputStreamSupplier(resourceURL);
-    } catch (IllegalArgumentException iae) {
-      File resourceFile = new File("src/main/java" + resourceName);
-      inSupplier = Files.newInputStreamSupplier(resourceFile);
+    public static File readResourceToTempFile(String resourceName) throws IOException {
+        InputSupplier<? extends InputStream> inSupplier;
+        try {
+            URL resourceURL = Resources.getResource(GroupLensDataModel.class, resourceName);
+            inSupplier = Resources.newInputStreamSupplier(resourceURL);
+        } catch (IllegalArgumentException iae) {
+            File resourceFile = new File("src/main/java" + resourceName);
+            inSupplier = Files.newInputStreamSupplier(resourceFile);
+        }
+        File tempFile = File.createTempFile("taste", null);
+        tempFile.deleteOnExit();
+        Files.copy(inSupplier, tempFile);
+        return tempFile;
     }
-    File tempFile = File.createTempFile("taste", null);
-    tempFile.deleteOnExit();
-    Files.copy(inSupplier, tempFile);
-    return tempFile;
-  }
 
-  @Override
-  public String toString() {
-    return "GroupLensDataModel";
-  }
-  
+    @Override
+    public String toString() {
+        return "GroupLensDataModel";
+    }
+
 }

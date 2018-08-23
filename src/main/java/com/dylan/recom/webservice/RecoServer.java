@@ -9,41 +9,47 @@ import org.glassfish.jersey.servlet.ServletContainer;
  * Created by dylan
  */
 public class RecoServer {
-  private Server webServer = null;
-  public void start() {
-    ServletContextHandler context = new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
-    context.setContextPath("/");
+    private Server webServer = null;
 
-    webServer = new Server(9999);
-    webServer.setHandler(context);
+    public void start() {
+        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
+        context.setContextPath("/");
 
-    ServletHolder jerseyServlet = context.addServlet(ServletContainer.class, "/*");
-    jerseyServlet.setInitOrder(0);
+        webServer = new Server(9999);
+        webServer.setHandler(context);
 
-    // Tells the Jersey Servlet which REST service/class to load.
-    jerseyServlet.setInitParameter("jersey.config.server.provider.packages",
-        "com.dylan.recom.webservice");
+        ServletHolder jerseyServlet = context.addServlet(ServletContainer.class, "/*");
+        jerseyServlet.setInitOrder(0);
 
-    try {
-      System.out.println("Web Server started ......");
-      webServer.start();
-      webServer.join();
-    } catch(Exception e) {
-      e.printStackTrace();
-    } finally {
-      webServer.destroy();
+        // Tells the Jersey Servlet which REST service/class to load.
+        jerseyServlet.setInitParameter("jersey.config.server.provider.packages",
+                "com.dylan.recom.webservice");
+
+        try {
+            System.out.println("Web Server started ......");
+            webServer.start();
+            webServer.join();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                stop();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            webServer.destroy();
+        }
+
     }
 
-  }
-
-  public void stop() throws Exception{
-    if(webServer != null) {
-      webServer.stop();
+    public void stop() throws Exception {
+        if (webServer != null) {
+            webServer.stop();
+        }
     }
-  }
 
-  public static void main(String[] args) throws Exception {
-    RecoServer recoServer = new RecoServer();
-    recoServer.start();
-  }
+    public static void main(String[] args) throws Exception {
+        RecoServer recoServer = new RecoServer();
+        recoServer.start();
+    }
 }
