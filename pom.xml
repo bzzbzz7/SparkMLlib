@@ -16,41 +16,36 @@
         <mahout.version>0.13.0</mahout.version>
         <!--<hive.version>1.2</hive.version>-->
 
-        <jedis.version>2.9.0</jedis.version>
-        <fastjson.version>1.2.47</fastjson.version>
         <jetty.version>9.4.11.v20180605</jetty.version>
         <jersey.version>2.26</jersey.version>
+        <rsapi.version>2.1</rsapi.version>
 
+        <fastjson.version>1.2.47</fastjson.version>
+        <commonio.version>2.6</commonio.version>
         <junit.version>4.11</junit.version>
+        <jedis.version>2.9.0</jedis.version>
     </properties>
-
-    <repositories>
-        <repository>
-            <!-- DO NOT set id to "local" because it is reserved by Maven -->
-            <id>local-lib</id>
-            <url>file://${project.basedir}/lib</url>
-            <layout>default</layout>
-        </repository>
-    </repositories>
 
     <dependencies>
         <!-- put javax.ws.rs as the first dependency, it is important!!! -->
-        <dependency>
-            <groupId>javax.ws.rs</groupId>
-            <artifactId>javax.ws.rs-api</artifactId>
-            <version>2.1</version>
-        </dependency>
-
 
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.6</version>
+            <version>${commonio.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>${jedis.version}</version>
+        </dependency>
 
-
-
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
+        </dependency>
 
         <!--======================junit======================-->
         <dependency>
@@ -59,26 +54,22 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-
         <!--======================jetty======================-->
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
             <version>${jetty.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-servlet</artifactId>
             <version>${jetty.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-util</artifactId>
             <version>${jetty.version}</version>
         </dependency>
-
         <!--======================jersey======================-->
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
@@ -105,21 +96,6 @@
             <artifactId>jersey-hk2</artifactId>
             <version>${jersey.version}</version>
         </dependency>
-
-        <!--======================redis======================-->
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>${jedis.version}</version>
-        </dependency>
-
-        <!--======================fastjson======================-->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>${fastjson.version}</version>
-        </dependency>
-
         <!--======================hadoop======================-->
         <dependency>
             <groupId>org.apache.hadoop</groupId>
@@ -165,7 +141,6 @@
             <artifactId>mahout-mr</artifactId>
             <version>${mahout.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.mahout</groupId>
             <artifactId>mahout-examples</artifactId>
@@ -197,7 +172,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
         <!--======================spark======================-->
         <dependency>
             <groupId>org.apache.spark</groupId>
@@ -240,6 +214,16 @@
             <version>${spark.version}</version>
         </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <!-- DO NOT set id to "local" because it is reserved by Maven -->
+            <id>local-lib</id>
+            <url>file://${project.basedir}/lib</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
+
 
 
 </project>
